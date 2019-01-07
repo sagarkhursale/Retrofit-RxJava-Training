@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TopRated> call, Response<TopRated> response) {
                 List<Result> resultList = response.body().getResults();
-                Log.i(TAG, "Result : " + resultList.size());
+                for (int i = 1; i < resultList.size(); i++)
+                    Log.i(TAG, "\n" + i + ")\t" + resultList.get(i).getTitle());
             }
 
             @Override
