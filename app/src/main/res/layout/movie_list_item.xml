@@ -7,9 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:paddingStart="16dp"
-    android:paddingTop="14dp"
-    android:paddingEnd="16dp"
+    android:padding="16dp"
     android:paddingBottom="14dp">
 
 
@@ -17,11 +15,10 @@
         android:id="@+id/tv_movie_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="40"
+        android:maxLength="50"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black"
         app:fontFamily="sans-serif" />
-
 
 </LinearLayout>

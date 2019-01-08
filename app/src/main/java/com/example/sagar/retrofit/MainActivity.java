@@ -70,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<TopRated> call, Throwable t) {
                 Log.i(TAG, t.getMessage());
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 
