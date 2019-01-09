@@ -7,19 +7,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
-    private static Retrofit mRetrofitClient;
+    private static Retrofit mRetrofit;
 
 
     public static Retrofit getRetrofitClient() {
-        if (mRetrofitClient == null) {
+        if (mRetrofit == null) {
 
-            mRetrofitClient = new Retrofit.Builder()
+            mRetrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
 
-        return mRetrofitClient;
+        return mRetrofit;
     }
 
 }

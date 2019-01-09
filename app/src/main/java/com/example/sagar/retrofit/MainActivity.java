@@ -1,6 +1,7 @@
 package com.example.sagar.retrofit;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,14 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
         topRatedMovies = movieApiService.getTopRatedMovies(API_KEY, PAGE_ONE);
 
-        // resultCallback();
+        //resultCallback();
     }
 
 
     private void resultCallback() {
         topRatedMovies.enqueue(new Callback<TopRated>() {
             @Override
-            public void onResponse(Call<TopRated> call, Response<TopRated> response) {
+            public void onResponse(@NonNull Call<TopRated> call, @NonNull Response<TopRated> response) {
+                assert response.body() != null;
                 List<Result> resultList = response.body().getResults();
 
                 mMovieListAdapter = new MovieListAdapter(resultList);
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<TopRated> call, Throwable t) {
+            public void onFailure(@NonNull Call<TopRated> call, @NonNull Throwable t) {
                 Log.i(TAG, t.getMessage());
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
