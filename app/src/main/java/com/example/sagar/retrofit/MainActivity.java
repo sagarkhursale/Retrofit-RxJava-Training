@@ -1,5 +1,6 @@
 package com.example.sagar.retrofit;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         topRatedMovies = movieApiService.getTopRatedMovies(API_KEY, PAGE_ONE);
 
-        resultCallback();
+        // resultCallback();
     }
 
 
@@ -90,12 +91,15 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.gotoNext) {
 
+            Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+            startActivity(intent);
 
         }
 
