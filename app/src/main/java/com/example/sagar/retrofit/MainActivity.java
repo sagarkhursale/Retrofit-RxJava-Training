@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.sagar.retrofit.apimodel.Result;
@@ -28,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private static String API_KEY;
     private static final int PAGE_ONE = 1;
 
-    MovieListAdapter mMovieListAdapter;
+    private RecyclerView recyclerView;
+
+    private MovieListAdapter mMovieListAdapter;
+    private Call<TopRated> topRatedMovies;
 
 
     @Override
@@ -38,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         API_KEY = getString(R.string.api_key);
 
-        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
-
+        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
         LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -50,11 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Call to MovieApiService
-
         MovieApiService movieApiService = ApiClient.getRetrofitClient().create(MovieApiService.class);
 
-        Call<TopRated> topRatedMovies = movieApiService.getTopRatedMovies(API_KEY, PAGE_ONE);
+        topRatedMovies = movieApiService.getTopRatedMovies(API_KEY, PAGE_ONE);
 
+        resultCallback();
+    }
+
+
+    private void resultCallback() {
         topRatedMovies.enqueue(new Callback<TopRated>() {
             @Override
             public void onResponse(Call<TopRated> call, Response<TopRated> response) {
@@ -73,7 +81,25 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.gotoNext) {
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
