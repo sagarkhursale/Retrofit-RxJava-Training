@@ -118,7 +118,7 @@ public class Main2Activity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
-                Log.i(TAG, "onComplete()");
+                Log.i(TAG, "Complete(Animal Observer)");
                 builder.append("\n\n");
                 textView_Demo.setText(builder.toString());
             }
@@ -142,6 +142,7 @@ public class Main2Activity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
+                Log.i(TAG, "Complete(AnimalObserverAllCAps)");
                 builder.append("\n\n");
                 textView_Demo.setText(builder.toString());
             }
@@ -170,6 +171,7 @@ public class Main2Activity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
+                Log.i(TAG, "Complete(CarObserver)");
                 builder.append("\n\n");
                 textView_Demo.setText(builder.toString());
             }
