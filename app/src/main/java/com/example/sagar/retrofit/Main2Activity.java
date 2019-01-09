@@ -7,12 +7,23 @@ import android.widget.TextView;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class Main2Activity extends AppCompatActivity {
+
     private final String TAG = Main2Activity.class.getSimpleName();
+
     private TextView textView_Demo;
+
+    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private final StringBuilder builder = new StringBuilder();
 
 
     @Override
@@ -23,40 +34,115 @@ public class Main2Activity extends AppCompatActivity {
         textView_Demo = findViewById(R.id.tv_demo);
 
 
-        Observable<String> animalObservable = Observable.just("Ant", "Tiger", "Lion", "Elephant", "Deer");
+        Observable<String> animalObservable = getAnimalsObservable();
+
+        DisposableObserver<String> animalObserver = getAnimalObserver();
+
+        DisposableObserver<String> animalObserverAllCaps = getAnimalObserverAllCaps();
 
 
-        Observer<String> animalObserver = getAnimalObserver();
+        mCompositeDisposable.add(
+                animalObservable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .filter(new Predicate<String>() {
+                            @Override
+                            public boolean test(String s) {
+                                return s.toLowerCase().startsWith("b");
+                            }
+                        })
+                        .subscribeWith(animalObserver));
 
+
+        mCompositeDisposable.add(
+                animalObservable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .filter(new Predicate<String>() {
+                            @Override
+                            public boolean test(String s) {
+                                return s.toLowerCase().startsWith("c");
+                            }
+                        })
+                        .map(new Function<String, String>() {
+                            @Override
+                            public String apply(String s) {
+                                return s.toUpperCase();
+                            }
+                        })
+                        .subscribeWith(animalObserverAllCaps)
+
+        );
+
+        // end
     }
 
 
-    Observer<String> getAnimalObserver() {
+    private Observable<String> getAnimalsObservable() {
+        return Observable.fromArray(
+                "Ant", "Ape",
+                "Bat", "Bee", "Bear", "ButterFly",
+                "Cat", "Crab", "Cod",
+                "Dog", "Dove",
+                "Fox", "Frog"
+        );
+    }
 
-        return new Observer<String>() {
 
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.i(TAG, "onSubscribe()");
-            }
+    private DisposableObserver<String> getAnimalObserver() {
+        return new DisposableObserver<String>() {
 
             @Override
             public void onNext(String s) {
+                String str = s + "\t";
+                builder.append(str);
                 Log.i(TAG, s);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i(TAG, e.getMessage());
+                Log.i(TAG, "1. " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 Log.i(TAG, "onComplete()");
+                builder.append("\n");
+                textView_Demo.setText(builder.toString());
             }
         };
     }
 
+
+    private DisposableObserver<String> getAnimalObserverAllCaps() {
+        return new DisposableObserver<String>() {
+
+            @Override
+            public void onNext(String s) {
+                String str = s + "\t";
+                builder.append(str);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "2. " + e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+                builder.append("\n");
+                textView_Demo.setText(builder.toString());
+            }
+        };
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //mDisposable.dispose();
+        mCompositeDisposable.clear();
+    }
 
     // END
 }
