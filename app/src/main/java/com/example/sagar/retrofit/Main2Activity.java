@@ -22,6 +22,7 @@ public class Main2Activity extends AppCompatActivity {
 
     private TextView textView_Demo;
 
+    private Disposable mDisposable;
     private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private final StringBuilder builder = new StringBuilder();
 
@@ -34,6 +35,17 @@ public class Main2Activity extends AppCompatActivity {
         textView_Demo = findViewById(R.id.tv_demo);
 
 
+        // 1)
+        Observable<String> carObservable = Observable.just("Audi", "Mercedes", "BMW", "Honda", "Toyota");
+
+        Observer<String> carObserver = getCarObserver();
+
+        carObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(carObserver);
+
+
+        // 2)
         Observable<String> animalObservable = getAnimalsObservable();
 
         DisposableObserver<String> animalObserver = getAnimalObserver();
@@ -107,7 +119,7 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onComplete() {
                 Log.i(TAG, "onComplete()");
-                builder.append("\n");
+                builder.append("\n\n");
                 textView_Demo.setText(builder.toString());
             }
         };
@@ -130,17 +142,46 @@ public class Main2Activity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
-                builder.append("\n");
+                builder.append("\n\n");
                 textView_Demo.setText(builder.toString());
             }
         };
     }
 
 
+    private Observer<String> getCarObserver() {
+
+        return new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                mDisposable = d;
+            }
+
+            @Override
+            public void onNext(String s) {
+                String str = s + "\t";
+                builder.append(str);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "3. " + e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+                builder.append("\n\n");
+                textView_Demo.setText(builder.toString());
+            }
+        };
+
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mDisposable.dispose();
+        mDisposable.dispose();
         mCompositeDisposable.clear();
     }
 
