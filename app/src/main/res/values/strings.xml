@@ -3,6 +3,7 @@
 
     <string name="title_top_movies">Top Rated Movies</string>
     <string name="title_rx_java">RxJava</string>
+    <string name="title_top_movies_rx">Top Movies With Rx</string>
 
     <string name="api_key">ef11f8a97d50d37a71e4353b2fb086a6</string>
 

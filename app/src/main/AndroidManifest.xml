@@ -24,6 +24,10 @@
             android:name=".Main2Activity"
             android:label="@string/title_rx_java"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".TopMoviesRxActivity"
+            android:label="@string/title_top_movies_rx"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

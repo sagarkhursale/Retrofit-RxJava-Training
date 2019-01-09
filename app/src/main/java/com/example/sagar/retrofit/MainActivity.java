@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
 
         // Call to MovieApiService
         MovieApiService movieApiService = ApiClient.getRetrofitClient().create(MovieApiService.class);
