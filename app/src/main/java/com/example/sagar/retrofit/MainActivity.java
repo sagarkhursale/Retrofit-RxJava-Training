@@ -28,8 +28,6 @@ import static android.support.v7.widget.RecyclerView.*;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = MainActivity.class.getSimpleName();
-
-    private static String API_KEY;
     private static final int PAGE_ONE = 1;
 
     private RecyclerView recyclerView;
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        API_KEY = getString(R.string.api_key);
+        final String API_KEY = getString(R.string.api_key);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -100,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, Main2Activity.class);
             startActivity(intent);
 
+        } else if (id == R.id.gotoTopMoviesRx) {
+
+            Intent intent = new Intent(MainActivity.this, TopMoviesRxActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

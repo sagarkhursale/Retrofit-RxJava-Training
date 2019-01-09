@@ -7,5 +7,10 @@
         android:title="@string/menu_title_reactive"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/gotoTopMoviesRx"
+        android:title="@string/menu_title_top_movies_rx"
+        app:showAsAction="never" />
+
 
 </menu>
