@@ -16,6 +16,7 @@ import com.example.sagar.retrofit.apimodel.TopRated;
 import com.example.sagar.retrofit.http.ApiClient;
 import com.example.sagar.retrofit.http.MovieApiService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -55,22 +56,25 @@ public class MainActivity extends AppCompatActivity {
 
         topRatedMovies = movieApiService.getTopRatedMovies(API_KEY, PAGE_ONE);
 
-        //resultCallback();
+        resultCallback();
     }
 
 
     private void resultCallback() {
         topRatedMovies.enqueue(new Callback<TopRated>() {
+
             @Override
             public void onResponse(@NonNull Call<TopRated> call, @NonNull Response<TopRated> response) {
                 assert response.body() != null;
+
                 List<Result> resultList = response.body().getResults();
+                List<String> movieTitleList = new ArrayList<>();
 
-                mMovieListAdapter = new MovieListAdapter(resultList);
+                for (Result result : resultList)
+                    movieTitleList.add(result.getTitle());
+
+                mMovieListAdapter = new MovieListAdapter(movieTitleList);
                 recyclerView.setAdapter(mMovieListAdapter);
-
-                for (int i = 1; i < resultList.size(); i++)
-                    Log.i(TAG, "\n" + i + ")\t" + resultList.get(i).getTitle());
             }
 
             @Override
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, t.getMessage());
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
+
         });
     }
 

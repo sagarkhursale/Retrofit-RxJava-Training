@@ -1,5 +1,6 @@
 package com.example.sagar.retrofit;
 
+
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,18 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.sagar.retrofit.apimodel.Result;
-
 import java.util.List;
 
 
 public class MovieListAdapter extends
         RecyclerView.Adapter<MovieListAdapter.MyViewHolder> {
 
-    private List<Result> mMovieList;
+    private List<String> mMovieList;
 
 
-    public MovieListAdapter(List<Result> mMovieList) {
+    MovieListAdapter(List<String> mMovieList) {
         this.mMovieList = mMovieList;
     }
 
@@ -36,7 +35,7 @@ public class MovieListAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
-        myViewHolder.tvMovieTitle.setText(mMovieList.get(position).getTitle());
+        myViewHolder.tvMovieTitle.setText(mMovieList.get(position));
     }
 
 
