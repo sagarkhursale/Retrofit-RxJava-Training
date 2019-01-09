@@ -31,6 +31,8 @@ public class TopMoviesRxActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MovieListAdapter mMovieListAdapter;
 
+    private Disposable mDisposable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +48,14 @@ public class TopMoviesRxActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
+        // Reactive call to MovieApiService
+
         MovieApiService movieApiService = ApiClient.getRetrofitClient().create(MovieApiService.class);
 
         Observable<TopRated> topRatedMoviesObservable = movieApiService.getTopRatedMoviesObservable(API_KEY, PAGE_TWO);
 
         Observer<String> topRatedMoviesObserver = getTopRatedMoviesObserver();
+
 
         topRatedMoviesObservable
                 .flatMap(new Function<TopRated, ObservableSource<Result>>() {
@@ -77,11 +82,15 @@ public class TopMoviesRxActivity extends AppCompatActivity {
     private Observer<String> getTopRatedMoviesObserver() {
         final List<String> resultList = new ArrayList<>();
 
+
         return new Observer<String>() {
+
             @Override
             public void onSubscribe(Disposable d) {
                 Log.i(TAG, "onSubscribe");
+                mDisposable = d;
             }
+
 
             @Override
             public void onNext(String s) {
@@ -89,17 +98,28 @@ public class TopMoviesRxActivity extends AppCompatActivity {
                 resultList.add(s);
             }
 
+
             @Override
             public void onError(Throwable e) {
                 Log.i(TAG, e.getMessage());
                 Toast.makeText(TopMoviesRxActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
+
             @Override
             public void onComplete() {
+                MovieListAdapter adapter = new MovieListAdapter(resultList);
+                recyclerView.setAdapter(adapter);
                 Log.i(TAG, "onComplete " + resultList.size());
             }
         };
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDisposable.dispose();
     }
 
 

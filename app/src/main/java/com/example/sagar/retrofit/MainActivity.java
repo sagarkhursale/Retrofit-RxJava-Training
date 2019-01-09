@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         topRatedMovies = movieApiService.getTopRatedMovies(API_KEY, PAGE_ONE);
 
-        resultCallback();
+        //resultCallback();
     }
 
 
